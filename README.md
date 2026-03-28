@@ -44,15 +44,6 @@ DBMS-Lab/
 
 ---
 
-## ⚙️ How to Run
-
-1. Open **SQL Server Management Studio (SSMS)**
-2. Run `schema.sql` first to create tables and insert sample data
-3. Run `queries.sql` to execute the lab queries
-
-> All scripts are written for **Microsoft SQL Server**. Functions like `YEAR()`, `TOP`, and `DATETIME` are MS SQL specific.
-
----
 
 ## 📝 Lab Questions Covered
 
@@ -81,15 +72,6 @@ DBMS-Lab/
 - Find customers with accounts in at least 1 branch across all cities
 - Find customers with accounts in at least 2 branches in a specific city
 
----
-
-## 🧾 Course Info
-
-- **Course Code:** CS2601-1  
-- **Course Type:** PCC Lab  
-- **Credits:** 01  
-- **Department:** Computer Science & Engineering  
-- **University:** NITTE (Deemed to be University)
 
 ---
 
@@ -97,7 +79,6 @@ DBMS-Lab/
 
 1. *Database Systems Models, Languages, Design and Application Programming* — Elmasri & Navathe, 7th Ed, Pearson
 2. *Database Management Systems* — Ramakrishnan & Gehrke, McGraw Hill
-
+   *SEGANI TATTLIKE HOGIDRA NEVU ODI EGA*
 ---
 
-> Made with 💀 and caffeine during lab season.
