@@ -2,6 +2,13 @@
 -- DATABASE: Order Processing
 -- =============================================
 
+CUSTOMER (cust# PK, cname, city)
+ORDER (order# PK, odate, cust# FK, ord-Amt)
+ORDER-ITEM (order# FK, item# FK, qty)
+ITEM (item# PK, unit-price)
+SHIPMENT (order# FK, warehouse# FK, ship-date)
+WAREHOUSE (warehouse# PK, city)
+
 CREATE DATABASE ord_proc;
 USE ord_proc;
 
