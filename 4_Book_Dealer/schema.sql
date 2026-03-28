@@ -2,6 +2,12 @@
 -- DATABASE: Book Dealer
 -- =============================================
 
+AUTHOR (author-id PK, name, city, country)
+PUBLISHER (publisher-id PK, name, city, country)
+CATALOG (book-id PK, title, author-id FK, publisher-id FK, category-id FK, year, price)
+CATEGORY (category-id PK, description)
+ORDER-DETAILS (order-no, book-id FK, quantity)
+
 CREATE DATABASE bk_shop;
 USE bk_shop;
 
