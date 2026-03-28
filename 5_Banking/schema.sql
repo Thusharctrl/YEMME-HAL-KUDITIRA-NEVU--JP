@@ -2,6 +2,13 @@
 -- DATABASE: Banking
 -- =============================================
 
+BRANCH (branch-name PK, branch-city, assets)
+ACCOUNT (accno PK, branch-name FK, balance)
+DEPOSITOR (customer-name FK, accno FK)
+CUSTOMER (customer-name PK, customer-street, customer-city)
+LOAN (loan-number PK, branch-name FK, amount)
+BORROWER (customer-name FK, loan-number FK)
+
 CREATE DATABASE bank;
 USE bank;
 
