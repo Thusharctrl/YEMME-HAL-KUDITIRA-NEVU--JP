@@ -2,6 +2,13 @@
 -- DATABASE: Insurance
 -- =============================================
 
+PERSON (driver-id PK, name, address)
+CAR (regno PK, model, year)
+ACCIDENT (report-number PK, accd-date, location)
+OWNS (driver-id FK, regno FK)
+PARTICIPATED (driver-id, regno, report-number FK, damage-amount)
+
+
 CREATE DATABASE Insurance;
 USE Insurance;
 
