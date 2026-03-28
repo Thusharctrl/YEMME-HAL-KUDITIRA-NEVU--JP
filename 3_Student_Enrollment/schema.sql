@@ -2,6 +2,12 @@
 -- DATABASE: Student Enrollment
 -- =============================================
 
+STUDENT (regno PK, name, major, bdate)
+COURSE (course# PK, cname, dept)
+ENROLL (regno FK, course# FK, sem, marks)
+BOOK_ADOPTION (course# FK, sem, book-ISBN FK)
+TEXT (book-ISBN PK, book-title, publisher, author)
+
 CREATE DATABASE st_enroll;
 USE st_enroll;
 
