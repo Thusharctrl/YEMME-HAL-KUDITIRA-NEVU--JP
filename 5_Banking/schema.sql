@@ -157,7 +157,7 @@ INSERT INTO BORROWER VALUES ('Ramesh',     10);
 -- Q1: customers with 2+ accounts at all branches in a city
 SELECT D.cname FROM DEPOSITOR D, ACCOUNT A, BRANCH B
 WHERE D.accno = A.accno AND A.bname = B.bname AND B.bcity = 'karkala'
-GROUP BY D.cname, A.bname HAVING COUNT(D.accno) >= 2;
+GROUP BY D.cname HAVING COUNT(D.accno) >= 2;
 
 -- Q2: customers with account in 1+ branch in all cities
 SELECT C.cname FROM CUSTOMER C
