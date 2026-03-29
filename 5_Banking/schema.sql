@@ -9,6 +9,17 @@ CUSTOMER (customer-name PK, customer-street, customer-city)
 LOAN (loan-number PK, branch-name FK, amount)
 BORROWER (customer-name FK, loan-number FK)
 
+    5️.Banking DB
+Table order: BRANCH → ACCOUNT → CUSTOMER → DEPOSITOR → LOAN → BORROWER
+Values to remember:
+
+Branch names: 'synd_nitte', 'Corp_nitte', 'PNB_nitte' → city 'karkala'
+Branch names: 'Corp_mang', 'PNB_mang' → city 'Mangalore'
+Branch names: 'state_udupi', 'synd_udupi' → city 'Udupi'
+Make Rakesh have 2+ accounts at karkala branches — needed for Q1
+Make one customer have accounts in all cities — needed for Q2
+Make one customer have accounts in 2+ karkala branches — needed for Q3
+
 CREATE DATABASE bank;
 USE bank;
 
@@ -142,3 +153,24 @@ INSERT INTO BORROWER VALUES ('Rajesh',     7);
 INSERT INTO BORROWER VALUES ('Rajesh',     8);
 INSERT INTO BORROWER VALUES ('Rakesh',     9);
 INSERT INTO BORROWER VALUES ('Ramesh',     10);
+
+-- Q1: customers with 2+ accounts at all branches in a city
+SELECT D.cname FROM DEPOSITOR D, ACCOUNT A, BRANCH B
+WHERE D.accno = A.accno AND A.bname = B.bname AND B.bcity = 'karkala'
+GROUP BY D.cname, A.bname HAVING COUNT(D.accno) >= 2;
+
+-- Q2: customers with account in 1+ branch in all cities
+SELECT C.cname FROM CUSTOMER C
+WHERE NOT EXISTS (
+    SELECT DISTINCT B1.bcity FROM BRANCH B1
+    WHERE NOT EXISTS (
+        SELECT A.bname FROM ACCOUNT A, DEPOSITOR D, BRANCH B
+        WHERE D.accno = A.accno AND A.bname = B.bname
+        AND B.bcity = B1.bcity AND D.cname = C.cname
+    )
+);
+
+-- Q3: customers with accounts in 2+ branches in a specific city
+SELECT D.cname FROM DEPOSITOR D, ACCOUNT A, BRANCH B
+WHERE D.accno = A.accno AND A.bname = B.bname AND B.bcity = 'karkala'
+GROUP BY D.cname HAVING COUNT(DISTINCT A.bname) >= 2;
