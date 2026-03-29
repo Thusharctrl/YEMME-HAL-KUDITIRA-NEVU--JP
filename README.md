@@ -22,23 +22,23 @@ SQL queries and schema scripts for the **Database Management Systems Lab** at NM
 DBMS-Lab/
 │
 ├── 1_Insurance/
-│   ├── schema.sql        # Table creation + sample data
+│   ├       
 │   └── queries.sql       # All queries for Insurance DB
 │
 ├── 2_Order/
-│   ├── schema.sql
+│   ├
 │   └── queries.sql
 │
 ├── 3_Student_Enrollment/
-│   ├── schema.sql
+│   ├
 │   └── queries.sql
 │
 ├── 4_Book_Dealer/
-│   ├── schema.sql
+│   ├
 │   └── queries.sql
 │
 └── 5_Banking/
-    ├── schema.sql
+    ├
     └── queries.sql
 ```
 
