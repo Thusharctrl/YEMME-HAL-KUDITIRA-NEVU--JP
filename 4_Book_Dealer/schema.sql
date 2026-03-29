@@ -8,6 +8,16 @@ CATALOG (book-id PK, title, author-id FK, publisher-id FK, category-id FK, year,
 CATEGORY (category-id PK, description)
 ORDER-DETAILS (order-no, book-id FK, quantity)
 
+    4️. Book Dealer DB
+Table order: AUTHOR → PUBLISHER → CATEGORY → CATALOGUE → ORDER_DET
+Values to remember:
+
+Author IDs: 110-115, Publisher IDs: 201-205
+Book IDs: 301-307, Category IDs: 1-5
+Publishers: McGRAW, Pearson, GKP, MediTech, Sun
+Make one book have the highest total qty in ORDER_DET — needed for Q1
+Make one book have the lowest total qty — needed for Q3
+Q2 updates Pearson publisher books by 10%
 CREATE DATABASE bk_shop;
 USE bk_shop;
 
@@ -89,3 +99,21 @@ INSERT INTO ORDER_DET VALUES (4, 305,  8);
 INSERT INTO ORDER_DET VALUES (5, 303, 20);
 INSERT INTO ORDER_DET VALUES (5, 306,  6);
 INSERT INTO ORDER_DET VALUES (5, 305,  7);
+
+-- Q1: author of book with max sales
+SELECT A.authorid, A.aname
+FROM AUTHOR A, CATALOGUE C, ORDER_DET O
+WHERE A.authorid = C.authorid AND C.bookid = O.bookid
+GROUP BY A.authorid, A.aname, C.bookid
+HAVING SUM(O.qty) >= ALL (SELECT SUM(O1.qty) FROM ORDER_DET O1 GROUP BY O1.bookid);
+
+-- Q2: increase price by 10% for specific publisher
+UPDATE CATALOGUE SET price = price * 1.1
+WHERE pubid = (SELECT pubid FROM PUBLISHER WHERE pname = 'Pearson');
+
+-- Q3: number of orders for book with min sales
+SELECT COUNT(O.ordno) AS Num_Orders FROM ORDER_DET O
+WHERE O.bookid = (
+    SELECT TOP 1 bookid FROM ORDER_DET
+    GROUP BY bookid ORDER BY SUM(qty) ASC
+);
