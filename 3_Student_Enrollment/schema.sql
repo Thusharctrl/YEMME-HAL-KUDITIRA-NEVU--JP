@@ -8,6 +8,15 @@ ENROLL (regno FK, course# FK, sem, marks)
 BOOK_ADOPTION (course# FK, sem, book-ISBN FK)
 TEXT (book-ISBN PK, book-title, publisher, author)
 
+    3️.Student Enrollment DB
+Table order: STUDENT → COURSE → TEXTBOOK → BOOK_ADAPTION → ENROLL
+Values to remember:
+
+Dept values: exactly 'CS', 'ENC', 'MECH'
+CS courses: 1-DBMS, 2-COMPILER, 3-JAVA
+Make CS courses have 3+ books in BOOK_ADAPTION — needed for Q1
+Publisher: use 'McGraw' for most books — needed for Q2
+Enroll multiple students in CS courses — needed for Q3
 CREATE DATABASE st_enroll;
 USE st_enroll;
 
@@ -98,3 +107,30 @@ INSERT INTO ENROLL VALUES ('112', 1, 5, 49);
 INSERT INTO ENROLL VALUES ('113', 2, 5, 80);
 INSERT INTO ENROLL VALUES ('114', 3, 7, 79);
 INSERT INTO ENROLL VALUES ('115', 4, 3, 79);
+
+-- Q1: textbooks for CS dept courses with >2 books
+SELECT C.course, T.bookISBN, T.title
+FROM COURSE C, BOOK_ADAPTION B, TEXTBOOK T
+WHERE C.course = B.course AND B.bookISBN = T.bookISBN AND C.dept = 'CS'
+AND C.course IN (
+    SELECT course FROM BOOK_ADAPTION
+    GROUP BY course HAVING COUNT(DISTINCT bookISBN) > 2
+) ORDER BY T.title;
+
+-- Q2: dept where all books are from one publisher
+SELECT DISTINCT C.dept FROM COURSE C
+WHERE NOT EXISTS (
+    SELECT B.bookISBN FROM BOOK_ADAPTION B
+    WHERE B.course IN (SELECT course FROM COURSE WHERE dept = C.dept)
+    AND B.bookISBN NOT IN (SELECT bookISBN FROM TEXTBOOK WHERE publisher = 'McGraw')
+);
+
+-- Q3: bookISBNs of dept with max students
+SELECT T.bookISBN, T.title
+FROM TEXTBOOK T, BOOK_ADAPTION B, COURSE C
+WHERE T.bookISBN = B.bookISBN AND B.course = C.course
+AND C.dept = (
+    SELECT TOP 1 C1.dept FROM COURSE C1, ENROLL E
+    WHERE C1.course = E.course
+    GROUP BY C1.dept ORDER BY COUNT(DISTINCT E.regno) DESC
+);
