@@ -8,6 +8,18 @@ ACCIDENT (report-number PK, accd-date, location)
 OWNS (driver-id FK, regno FK)
 PARTICIPATED (driver-id, regno, report-number FK, damage-amount)
 
+    1️.Insurance DB
+Table order to create: PERSON → CAR → ACCIDENT → OWNS → PARTICIPATED
+Values to remember:
+
+Driver IDs: '111' to '115'
+Reg numbers: 'KA-12', 'KA-13', 'MH-11', 'AP-10', 'TN-11'
+Models: FORD, SWIFT, TOYOTA, INDIGO
+Accident year: use 1989 (Q1 filters by year)
+Report numbers: 1 to 10
+Damage amounts: 20000, 10000, 60000 etc
+'John Smith' owns KA-12 and KA-13 — critical for Q2
+Report 1 → car KA-12 — critical for Q3
 
 CREATE DATABASE Insurance;
 USE Insurance;
@@ -98,3 +110,19 @@ INSERT INTO PARTICIPATED VALUES ('112', 'TN-11', 7,  40000);
 INSERT INTO PARTICIPATED VALUES ('113', 'TN-12', 8,  40000);
 INSERT INTO PARTICIPATED VALUES ('113', 'KL-15', 9,  50000);
 INSERT INTO PARTICIPATED VALUES ('113', 'TN-12', 10, 20000);
+
+
+
+-- Q1: people in accidents in 1989
+SELECT COUNT(DISTINCT P.driverid)
+FROM PARTICIPATED P, ACCIDENT A
+WHERE P.reportno = A.reportno AND YEAR(A.accdate) = 1989;
+
+-- Q2: accidents involving John Smith's cars
+SELECT COUNT(P.reportno) AS No_Of_Accidents
+FROM PARTICIPATED P, PERSON PN
+WHERE P.driverid = PN.driverid AND PN.name = 'John Smith';
+
+-- Q3: update damage amount
+UPDATE PARTICIPATED SET dmgamt = 3000
+WHERE regno = 'KA-12' AND reportno = 1;
