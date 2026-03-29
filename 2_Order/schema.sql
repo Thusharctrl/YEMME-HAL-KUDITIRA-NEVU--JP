@@ -9,6 +9,18 @@ ITEM (item# PK, unit-price)
 SHIPMENT (order# FK, warehouse# FK, ship-date)
 WAREHOUSE (warehouse# PK, city)
 
+    2️. Order DB
+Table order: CUSTOMER → ITEM → C_ORDER → ORDER_ITEM → WAREHOUSE → SHIPMENT
+Values to remember:
+
+Customer IDs: 111 to 115
+Order IDs: 201 to 210
+Item IDs: 301 to 305, prices: 2000, 2000, 1000, 5000, 4000
+Warehouse IDs: 1-6, cities: MANGALORE (1,2,3), UDUPI (4,5), KARKALA (6)
+Ship multiple orders from 2+ warehouses — needed for Q2
+One customer should have all items ordered — needed for Q3
+ordamt — put any non-null values while inserting
+
 CREATE DATABASE ord_proc;
 USE ord_proc;
 
@@ -107,3 +119,27 @@ INSERT INTO SHIPMENT VALUES (203, 2, '2004-02-01');
 INSERT INTO SHIPMENT VALUES (203, 3, '2004-02-01');
 INSERT INTO SHIPMENT VALUES (204, 4, '2004-06-02');
 INSERT INTO SHIPMENT VALUES (204, 2, '2004-06-02');
+
+-- Q1: customer name, order count, avg amount
+SELECT C.cname, COUNT(O.orderid) AS No_Of_Orders, AVG(O.ordamt) AS AVG_ORDER_AMT
+FROM CUSTOMER C, C_ORDER O
+WHERE C.custid = O.custid GROUP BY C.cname;
+
+-- Q2: items with >2 orders shipped from 2+ warehouses
+SELECT OI.itemid, COUNT(DISTINCT OI.orderid) AS Num_Orders, SUM(OI.qty) AS Total_Qty
+FROM ORDER_ITEM OI
+WHERE OI.orderid IN (
+    SELECT S.orderid FROM SHIPMENT S
+    GROUP BY S.orderid HAVING COUNT(DISTINCT S.warehouseid) >= 2
+)
+GROUP BY OI.itemid HAVING COUNT(DISTINCT OI.orderid) > 2;
+
+-- Q3: customers who ordered every item
+SELECT C.cname FROM CUSTOMER C
+WHERE NOT EXISTS (
+    SELECT itemid FROM ITEM
+    WHERE itemid NOT IN (
+        SELECT OI.itemid FROM C_ORDER O, ORDER_ITEM OI
+        WHERE O.orderid = OI.orderid AND O.custid = C.custid
+    )
+);
