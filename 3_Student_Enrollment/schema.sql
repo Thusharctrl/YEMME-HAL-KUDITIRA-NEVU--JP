@@ -121,11 +121,14 @@ AND C.course IN (
 -- Q2: dept where all books are from one publisher
 SELECT DISTINCT C.dept FROM COURSE C
 WHERE NOT EXISTS (
-    SELECT B.bookISBN FROM BOOK_ADAPTION B
-    WHERE B.course IN (SELECT course FROM COURSE WHERE dept = C.dept)
-    AND B.bookISBN NOT IN (SELECT bookISBN FROM TEXTBOOK WHERE publisher = 'McGraw')
+    SELECT B.bookISBN 
+    FROM BOOK_ADAPTION B, COURSE C2
+    WHERE B.course = C2.course 
+    AND C2.dept = C.dept
+    AND B.bookISBN NOT IN (
+        SELECT bookISBN FROM TEXTBOOK WHERE publisher = 'McGraw'
+    )
 );
-
 -- Q3: bookISBNs of dept with max students
 SELECT T.bookISBN, T.title
 FROM TEXTBOOK T, BOOK_ADAPTION B, COURSE C
