@@ -142,3 +142,17 @@ AND C.dept IN (
         WHERE C2.course = E1.course GROUP BY C2.dept
     )
 );
+
+OR 
+    
+SELECT T.bookISBN, T.title
+FROM TEXTBOOK T, BOOK_ADAPTION B, COURSE C
+WHERE T.bookISBN = B.bookISBN 
+AND B.course = C.course
+AND C.dept = (
+    SELECT TOP 1 C1.dept 
+    FROM COURSE C1, ENROLL E
+    WHERE C1.course = E.course
+    GROUP BY C1.dept
+    ORDER BY COUNT(DISTINCT E.regno) DESC
+);
