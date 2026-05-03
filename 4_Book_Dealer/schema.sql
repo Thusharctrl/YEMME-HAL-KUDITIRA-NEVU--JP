@@ -112,10 +112,7 @@ UPDATE CATALOGUE SET price = price * 1.1
 WHERE pubid = (SELECT pubid FROM PUBLISHER WHERE pname = 'Pearson');
 
 -- Q3: number of orders for book with min sales
-SELECT COUNT(O.ordno) AS Num_Orders 
+SELECT COUNT(O.ordno) AS Num_Orders,O.bookid AS BOOK_ID
 FROM ORDER_DET O
-WHERE O.bookid IN (
-    SELECT bookid FROM ORDER_DET
-    GROUP BY bookid 
-    HAVING SUM(qty) <= ALL (SELECT SUM(qty) FROM ORDER_DET GROUP BY bookid)
-);
+GROUP BY bookid 
+HAVING SUM(qty) <= ALL (SELECT SUM(qty) FROM ORDER_DET GROUP BY bookid)
