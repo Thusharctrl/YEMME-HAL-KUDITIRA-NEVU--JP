@@ -136,9 +136,9 @@ SELECT OI.itemid, COUNT(DISTINCT OI.orderid) AS Num_Orders, SUM(OI.qty) AS Total
 FROM ORDER_ITEM OI
 WHERE OI.orderid IN (
     SELECT S.orderid FROM SHIPMENT S
-    GROUP BY S.orderid HAVING COUNT(DISTINCT S.warehouseid) >= 2
+    GROUP BY S.orderid HAVING COUNT(*) >= 2
 )
-GROUP BY OI.itemid HAVING COUNT(DISTINCT OI.orderid) > 2;
+GROUP BY OI.itemid HAVING COUNT(*) > 2;
 
 -- Q3: customers who ordered every item
 SELECT C.cname FROM CUSTOMER C
@@ -148,4 +148,16 @@ WHERE NOT EXISTS (
         SELECT OI.itemid FROM C_ORDER O, ORDER_ITEM OI
         WHERE O.orderid = OI.orderid AND O.custid = C.custid
     )
+);
+
+
+or (opt)
+
+SELECT C.cname
+FROM CUSTOMER C
+JOIN C_ORDER O ON C.custid = O.custid
+JOIN ORDER_ITEM OI ON O.orderid = OI.orderid
+GROUP BY C.cname
+HAVING COUNT(DISTINCT OI.itemid) = (
+    SELECT COUNT(*) FROM ITEM
 );
