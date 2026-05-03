@@ -170,6 +170,18 @@ WHERE NOT EXISTS (
     )
 );
 
+
+OR(OPTIONAL). 
+
+SELECT D.cname
+FROM DEPOSITOR D
+JOIN ACCOUNT A ON D.accno = A.accno
+JOIN BRANCH B ON A.bname = B.bname
+GROUP BY D.cname
+HAVING COUNT(DISTINCT B.bcity) = (
+    SELECT COUNT(DISTINCT bcity) FROM BRANCH
+);
+
 -- Q3: customers with accounts in 2+ branches in a specific city
 SELECT D.cname FROM DEPOSITOR D, ACCOUNT A, BRANCH B
 WHERE D.accno = A.accno AND A.bname = B.bname AND B.bcity = 'karkala'
